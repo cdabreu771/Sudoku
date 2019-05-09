@@ -2,18 +2,99 @@ package Sudoku;
 
 import javax.swing.*;
 import javax.swing.border.Border;
-
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Scanner;
 
-public class gameBoard {
-	protected gameBoard() {
+
+
+public class GameBoard {
+	private final String location = "//Users//Camille//Documents//COEN275//Assignment1//src/Sudoku//contents.txt";
+	//private Scanner scanner = new Scanner(System.in);
+	private File file;
+	private String[][]gameStringContents = new String[9][9];
+	
+	protected GameBoard() {
+		file = new File(location);
+		System.out.println("Constructor runs");
 		createGameBoard();
 	}
-	public static void createGameBoard() {
+	
+	public String[][] readContents() {
+		String[][]array = new String[9][9];
+		//String[][] inArray = new String[9][9];
+		final String DELIMITER = ",";
+		String[]values=new String[81];
+		try {
+			BufferedReader bufferedReader = new BufferedReader(new FileReader(file)); //Bufferedreader reads one line.
+			String line = "";
+			System.out.println("file read in");
+			//while ((line = bufferedReader.readLine()) != null) {
+				
+				
+				
+				
+			while((line = bufferedReader.readLine()) != null){
+				
+				values = line.split(DELIMITER);
+				int j = 0;
+	            for (int i = 0; i < values.length; i++) {
+	            	array[i][j]= values[i];
+	                j++;
+	            }
+			}
+	               
+
+				
+				/*
+				
+				for(int i = 0; i < 9; i++) {
+					for(int j = 0; j<9;j++) {
+						array[i][j] = Double.parseDouble(sudokuContents[j]);
+					}
+				}*/
+			bufferedReader.close();
+			
+		} catch (FileNotFoundException ex) {
+			System.out.println("FileNotFoundException Occurred");
+		} catch (IOException ex) {
+			System.out.println ("IOException Occurred");
+		}
+		return array;
+	}
+	
+	public void createGameBoard() {
 		
 		//Create new JFrame and JPanels
 		JFrame frame = new JFrame("Sudoku");
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(9,9));
+		JLabel[][] gameContents = new JLabel[9][9];
+		System.out.println("createGameBoard runs");
+		gameStringContents=readContents();
+		
+		for (int i = 0; i < gameStringContents.length; i++) {
+			for (int j = 0; j < gameStringContents[i].length; i++) {
+					gameContents[i][j].setText(gameStringContents[i][j]);
+					panel.add(gameContents[i][j]);
+			}
+		}
+		
+		frame.add(panel);
+		
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    frame.setSize(900,900);
+	    frame.setVisible(true);
+	}
+}
+		
+		/*
+		int[][] contents = 
 		JPanel upperLeft = new JPanel();
 		JPanel upperCenter = new JPanel();
 		JPanel upperRight = new JPanel();
@@ -164,6 +245,8 @@ public class gameBoard {
 		frame.add(lowerCenter);
 		frame.add(lowerRight);
 		
+		
+		
 		//Provide final details regarding JFrame
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    frame.setSize(600, 600);
@@ -171,3 +254,4 @@ public class gameBoard {
 	
 	}
 }
+*/
