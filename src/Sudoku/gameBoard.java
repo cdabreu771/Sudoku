@@ -21,7 +21,7 @@ public class GameBoard {
 	
 	protected GameBoard() {
 		file = new File(location);
-		System.out.println("Constructor runs");
+		//System.out.println("Constructor runs");
 		createGameBoard();
 	}
 	
@@ -33,21 +33,24 @@ public class GameBoard {
 		try {
 			BufferedReader bufferedReader = new BufferedReader(new FileReader(file)); //Bufferedreader reads one line.
 			String line = "";
-			System.out.println("file read in");
+			//System.out.println("file read in");
 			//while ((line = bufferedReader.readLine()) != null) {
 				
 				
 				
-				
-			while((line = bufferedReader.readLine()) != null){
-				
+
+			int i = 0;
+			while((line = bufferedReader.readLine()) != null) {
 				values = line.split(DELIMITER);
-				int j = 0;
-	            for (int i = 0; i < values.length; i++) {
-	            	array[i][j]= values[i];
-	                j++;
+				
+	            for (int j = 0; j < values.length; j++) {
+	            	array[i][j]= values[j];   
 	            }
+	            
+	            i++;
+	            
 			}
+			System.out.println("while loop exited");
 	               
 
 				
@@ -74,19 +77,18 @@ public class GameBoard {
 		JFrame frame = new JFrame("Sudoku");
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(9,9));
-		JLabel[][] gameContents = new JLabel[9][9];
-		System.out.println("createGameBoard runs");
+		JLabel[][] gameContents= new JLabel[9][9];
+		//System.out.println("createGameBoard runs");
 		gameStringContents=readContents();
-		
-		for (int i = 0; i < gameStringContents.length; i++) {
-			for (int j = 0; j < gameStringContents[i].length; i++) {
-					gameContents[i][j].setText(gameStringContents[i][j]);
+		System.out.println("Return from readContents()");
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+					gameContents[i][j]=new JLabel(gameStringContents[i][j]); 
 					panel.add(gameContents[i][j]);
 			}
 		}
 		
 		frame.add(panel);
-		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    frame.setSize(900,900);
 	    frame.setVisible(true);
