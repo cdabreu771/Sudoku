@@ -16,16 +16,11 @@ import java.awt.Graphics2D;
 // This class creates the UI for the GameBoard
 public class GameBoard {
 
-	
-	
-	/* This is the constructor for the GameBoard. It initializes the input file, and calls
-	 * createGameBoard().
-	 */
+	// This is the constructor for the GameBoard. It calls createGameBoard().
 	protected GameBoard() {
 		
 		createGameBoard();
 	}
-	
 	
 	// This function creates the game board.
 	public void createGameBoard() {
@@ -46,8 +41,6 @@ public class GameBoard {
 	    frame.setSize(680,680);
 	    frame.setVisible(true);
 	}
-	
-	
-	}
+}
 
 		

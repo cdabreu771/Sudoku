@@ -14,10 +14,13 @@ public class SolutionChecker {
 		// Check rows for repeats
 		for(int i= 0; i < 9; i++) {
 			for(int j = 0; j < 8; j++) {
-				for(int k = j + 1; k < 9; k++) {
-					if(solutionGrid[i][j]==solutionGrid[i][k]) {
-						PopUpManager popUp = new PopUpManager(false);
-					}
+				if (solutionGrid[i][j] == solutionGrid[i][j+1]) {
+					PopUpManager popUp = new PopUpManager(false);
+				//for(int k = j+1; k < 9; k++) {
+					//if(solutionGrid[i][j]==solutionGrid[i][k]) {
+						//PopUpManager popUp = new PopUpManager(false);
+						//return;
+					//}
 				}
 			}
 		}
@@ -25,10 +28,13 @@ public class SolutionChecker {
 		// Check columns for repeats.
 		for(int i= 0; i < 9; i++) {
 			for(int j = 0; j < 8; j++) {
-				for(int k = j + 1; k < 9; k++) {
-					if(solutionGrid[j][i] == solutionGrid[k][i]) {
-						PopUpManager popUp = new PopUpManager(false);
-					}
+				if (solutionGrid[i][j] == solutionGrid[i+1][j]) {
+					PopUpManager popUp = new PopUpManager(false);
+				//for(int k = j + 1; k < 9; k++) {
+					//if(solutionGrid[j][i] == solutionGrid[k][i]) {
+						//PopUpManager popUp = new PopUpManager(false);
+						//return;
+					//}
 				}
 			}
 		}
@@ -41,6 +47,7 @@ public class SolutionChecker {
 		         for(int l = k + 1; l < 9; l++) {
 		            if(solutionGrid[i + k%3][j + k/3]==solutionGrid[i + l%3][j + l/3]) {
 		            	PopUpManager popUp = new PopUpManager(false);
+		            	return;
 		            }
 		         }
 		      }
