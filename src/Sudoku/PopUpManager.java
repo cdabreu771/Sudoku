@@ -4,14 +4,23 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.NumberFormat;
+import java.util.InputMismatchException;
 
 import javax.swing.*;
 
+// This class holds all the pop-ups for the game.
 public class PopUpManager {
-	public PopUpManager()
+	
+	// This is the constructor for the PopUpManager. It calls createPopUpOne().
+	public PopUpManager(int x, int y, SudokuJPanel panel)
 	{
-		
+		createPopUpOne(x,y,panel);
 	}
+	
+	/* This is the constructor for the PopUpManager that takes in a boolean input. It then
+	 * calls ethier createPopUpTwo() or createPopUpThree() depending on the input status.
+	 */
 	public PopUpManager(boolean status)
 	{
 		if(status == true) {
@@ -21,8 +30,11 @@ public class PopUpManager {
 			createPopUpThree();
 		}
 	}
-
-	public void createPopUpOne(){
+	
+	/* This function handles pop-up one. It allows for the user to input a number into the
+	 * sudoku board.
+	 */
+	public void createPopUpOne(int x, int y, SudokuJPanel panel){
 		
 		// Create JFrame, JPanels, JButtons, JLabels, and JTextField.
 		JFrame frame = new JFrame("Input");
@@ -32,39 +44,44 @@ public class PopUpManager {
 		JPanel panel4 = new JPanel();
 		JButton button1 = new JButton("OK");
 		JButton button2 = new JButton("Cancel");
-		JLabel label1 = new JLabel("");
-		JLabel label2 = new JLabel("Enter a number");
+		JLabel label1 = new JLabel("Enter a number");
 		JTextField textField = new JTextField(20);
-		
-		// URL of question mark image.
 				
-		
 		// Set layout for the panels as FlowLayout.
 		panel1.setLayout(new FlowLayout());
 		panel2.setLayout(new FlowLayout());
 		panel3.setLayout(new FlowLayout());
 		panel4.setLayout(new FlowLayout());
 		
-		// Assign image to JLabel and add to JPanel.
-	    //label1.setIcon(new ImageIcon(getClass().getResource(url)));
-		//////// HELP WITH IMAGE//////////////////////////*************************
-		//Picture pic = new Picture("question.png");
-		//label1.
-	    panel1.add(label1);
-		
 	    // Add JLabel, JTextField, and JButtons to JPanels.
-	    panel2.add(label2);
+	    panel2.add(label1);
 	    panel3.add(textField);
 	    panel4.add(button1);
 	    panel4.add(button2);
 	    
-	    ////////////HELP WITH ACTION LISTENER BUTTON1////////////////***************
+	    // Add an action listener to button1.
 	    button1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
+	
+				try {
+					String num = textField.getText();
+					if (Integer.parseInt(num) > 0 && Integer.parseInt(num) < 10) {
+						frame.dispose();
+						panel.updateData(num);
+					}
+					else {
+						System.out.println("Invalid entry");
+					}
+				} catch(InputMismatchException e) {
+					System.out.println("InputMismatchException Occurred");
+				} catch(NumberFormatException e) {
+					System.out.println("NumberFormatException Occurred");
+				}
 				
 			}
 		});
 	    
+	    // Add an action listener to button2.
 	    button2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				frame.dispose();
@@ -81,9 +98,9 @@ public class PopUpManager {
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    frame.setSize(400, 150);
 	    frame.setVisible(true);
-		
 	}
 	
+	// This function handles pop-up two. It displays a message if the sudoku solution is correct.
 	public void createPopUpTwo(){
 		
 		// Create JFrame, JPanels, JButtons, JLabels, and JTextField.
@@ -92,32 +109,23 @@ public class PopUpManager {
 		JPanel panel2= new JPanel();
 		JPanel panel3 = new JPanel();
 		JButton button1 = new JButton("OK");
-		JLabel label1 = new JLabel();
-		JLabel label2 = new JLabel("You won the Sudoku!");
+		JLabel label1 = new JLabel("You won the Sudoku!");
 	
-		
 		// Set layout for the panels as FlowLayout.
 		panel1.setLayout(new FlowLayout());
 		panel2.setLayout(new FlowLayout());
 		panel3.setLayout(new FlowLayout());
 		
-		// Assign image to JLabel and add to JPanel.
-	    //label1.setIcon(new ImageIcon(getClass().getResource(url)));
-		//////// HELP WITH IMAGE//////////////////**************************
-		//Picture pic = new Picture("question.png");
-		//label1.
-	    panel1.add(label1);
-		
 	    // Add JLabel, JTextField, and JButtons to JPanels.
-	    panel2.add(label2);
+	    panel2.add(label1);
 	    panel3.add(button1);
 	    
+	    // Add an action listener to button1.
 	    button1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				frame.dispose();
 			}
 		});
-	    
 	    
 	    // Add JPanels to JFrame using BorderLayout.
 		frame.add(panel1, BorderLayout.EAST);
@@ -128,9 +136,9 @@ public class PopUpManager {
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    frame.setSize(400, 100);
 	    frame.setVisible(true);
-		
 	}
 
+	// This function handles pop-up three. It displays a message if the sudoku solution is incorrect.
 	public void createPopUpThree(){
 		
 		// Create JFrame, JPanels, JButtons, JLabels, and JTextField.
@@ -140,40 +148,32 @@ public class PopUpManager {
 		JPanel panel3 = new JPanel();
 		JButton button1 = new JButton("Start Over");
 		JButton button2 = new JButton("Exit");
-		JLabel label1 = new JLabel();
-		JLabel label2 = new JLabel("Incorrect Solution");
-	
+		JLabel label1 = new JLabel("Incorrect Solution");
 		
 		// Set layout for the panels as FlowLayout.
 		panel1.setLayout(new FlowLayout());
 		panel2.setLayout(new FlowLayout());
 		panel3.setLayout(new FlowLayout());
-		
-		// Assign image to JLabel and add to JPanel.
-	    //label1.setIcon(new ImageIcon(getClass().getResource(url)));
-		//////// HELP WITH IMAGE//////////////////////////////////*********************
-		//Picture pic = new Picture("question.png");
-		//label1.
-	    panel1.add(label1);
-		
+	
 	    // Add JLabel, JTextField, and JButtons to JPanels.
-	    panel2.add(label2);
+	    panel2.add(label1);
 	    panel3.add(button1);
 	    panel3.add(button2);
 	    
-	    //////// HELP WITH ACTION LISTENER FOR BUTTON1/////////////********************
+	    // Add an action listener to button1.
 	    button1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				frame.dispose();
 				GameBoard newGame = new GameBoard();
 			}
 		});
+	    
+	    // Add an action listener to button2.
 	    button2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				frame.dispose();
 			}
 		});
-	    
 	    
 	    // Add JPanels to JFrame using BorderLayout.
 		frame.add(panel1, BorderLayout.EAST);
@@ -184,6 +184,5 @@ public class PopUpManager {
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    frame.setSize(400, 100);
 	    frame.setVisible(true);
-		
 	}
 }
