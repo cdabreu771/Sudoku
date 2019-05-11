@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -28,11 +27,6 @@ public class SudokuJPanel extends JPanel {
 	int currentlySelectedRow;
 	int currentlySelectedCol;
 	SudokuJPanel object = this;
-	int mustFill = 0;
-	//boolean status = false;
-	
-	//int[] nonEditableXArray = new int[81];
-	//int[] nonEditableYArray = new int[81];
 	
 	/* This is the constructor for the SudokuJPanel class. It initializes the input file, and initiates ReadContents.
 	 * It also holds the mouse listener.
@@ -72,6 +66,7 @@ public class SudokuJPanel extends JPanel {
 				}
 			}
 		}
+		boardStatus = true;
 		
 		if (boardStatus) {
 			SolutionChecker solution = new SolutionChecker(gameStringContents);

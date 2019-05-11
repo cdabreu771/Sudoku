@@ -11,48 +11,44 @@ public class SolutionChecker {
 	 */
 	public void solution(String[][] solutionGrid){
 		
-		// Check rows for repeats
-		for(int i= 0; i < 9; i++) {
+		boolean status = true;
+		
+		// Check rows for duplicates
+		for(int i = 0; i < 9; i++) {
 			for(int j = 0; j < 8; j++) {
-				if (solutionGrid[i][j] == solutionGrid[i][j+1]) {
-					PopUpManager popUp = new PopUpManager(false);
-				//for(int k = j+1; k < 9; k++) {
-					//if(solutionGrid[i][j]==solutionGrid[i][k]) {
-						//PopUpManager popUp = new PopUpManager(false);
-						//return;
-					//}
+				for(int k = j + 1; k < 9; k++) {
+					if(Integer.parseInt(solutionGrid[i][j])==Integer.parseInt(solutionGrid[i][k])) {
+						status = false;
+					}
 				}
 			}
 		}
-		
-		// Check columns for repeats.
-		for(int i= 0; i < 9; i++) {
-			for(int j = 0; j < 8; j++) {
-				if (solutionGrid[i][j] == solutionGrid[i+1][j]) {
-					PopUpManager popUp = new PopUpManager(false);
-				//for(int k = j + 1; k < 9; k++) {
-					//if(solutionGrid[j][i] == solutionGrid[k][i]) {
-						//PopUpManager popUp = new PopUpManager(false);
-						//return;
-					//}
+
+		// Check columns for duplicates.
+		for(int j = 0; j < 9; j++) {
+			for(int i = 0; i < 8; i++) {
+				for(int k = i + 1; k < 9; k++) {
+					if(Integer.parseInt(solutionGrid[i][j])==Integer.parseInt(solutionGrid[k][j])) {
+						status = false;
+					}
 				}
 			}
 		}
-		
-		// Check individual 3x3 grids for repeats.
+
+		// Check 3x3 squares for duplicates.
 		for(int i = 0; i < 9; i += 3) {
-		   for(int j = 0; j < 9; j += 3) {
-		      // row, col is start of the 3 by 3 grid
-		      for(int k = 0; k < 8; k++) {
-		         for(int l = k + 1; l < 9; l++) {
-		            if(solutionGrid[i + k%3][j + k/3]==solutionGrid[i + l%3][j + l/3]) {
-		            	PopUpManager popUp = new PopUpManager(false);
-		            	return;
-		            }
-		         }
-		      }
-		   }
+			for(int j = 0; j < 9; j += 3) {
+				for(int k = 0; k < 8; k++) {
+					for(int l = k + 1; l < 9; l++) {
+						if(Integer.parseInt(solutionGrid[i + k%3][j + k/3])==Integer.parseInt(solutionGrid[i + l%3][j + l/3])) {
+							status = false;
+						}
+					}
+				}
+			}
 		}
-		PopUpManager popUp = new PopUpManager(true);
+		   
+		PopUpManager popUp = new PopUpManager(status);
 	}
 }
+

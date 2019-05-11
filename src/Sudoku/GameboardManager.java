@@ -7,11 +7,4 @@ public class GameboardManager {
 	public static void main(String[] args) {	
 		GameBoard newGame = new GameBoard();
 	}
-	
-	
-	// puzzle
-	// user input
-	// covers for the puzzle
-	
-	//when updating user puzzle, update puzzle. use hash set to check whether every number is used in rows columns and grids
 }
