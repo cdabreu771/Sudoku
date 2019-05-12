@@ -13,15 +13,15 @@ import javax.swing.*;
 public class PopUpManager {
 	
 	// This is the constructor for the PopUpManager. It calls createPopUpOne().
-	public PopUpManager(int x, int y, SudokuJPanel panel)
+	protected PopUpManager(SudokuJPanel panel)
 	{
-		createPopUpOne(x,y,panel);
+		createPopUpOne(panel);
 	}
 	
 	/* This is the constructor for the PopUpManager that takes in a boolean input. It then
-	 * calls ethier createPopUpTwo() or createPopUpThree() depending on the input status.
+	 * calls either createPopUpTwo() or createPopUpThree() depending on the input status.
 	 */
-	public PopUpManager(boolean status)
+	protected PopUpManager(boolean status)
 	{
 		if(status == true) {
 			createPopUpTwo();
@@ -32,9 +32,9 @@ public class PopUpManager {
 	}
 	
 	/* This function handles pop-up one. It allows for the user to input a number into the
-	 * sudoku board.
+	 * Sudoku board.
 	 */
-	public void createPopUpOne(int x, int y, SudokuJPanel panel){
+	private void createPopUpOne(SudokuJPanel panel){
 		
 		// Create JFrame, JPanels, JButtons, JLabels, and JTextField.
 		JFrame frame = new JFrame("Input");
@@ -77,7 +77,6 @@ public class PopUpManager {
 				} catch(NumberFormatException e) {
 					System.out.println("NumberFormatException Occurred");
 				}
-				
 			}
 		});
 	    
@@ -97,11 +96,13 @@ public class PopUpManager {
 		// Provide final details regarding JFrame.
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    frame.setSize(400, 150);
+	    frame.setResizable(false);
+	    frame.setLocation(450,250);
 	    frame.setVisible(true);
 	}
 	
-	// This function handles pop-up two. It displays a message if the sudoku solution is correct.
-	public void createPopUpTwo(){
+	// This function handles pop-up two. It displays a message if the Sudoku solution is correct.
+	private void createPopUpTwo(){
 		
 		// Create JFrame, JPanels, JButtons, JLabels, and JTextField.
 		JFrame frame = new JFrame("Message");
@@ -135,11 +136,13 @@ public class PopUpManager {
 		// Provide final details regarding JFrame.
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    frame.setSize(400, 100);
+	    frame.setResizable(false);
+	    frame.setLocation(450,250);
 	    frame.setVisible(true);
 	}
 
-	// This function handles pop-up three. It displays a message if the sudoku solution is incorrect.
-	public void createPopUpThree(){
+	// This function handles pop-up three. It displays a message if the Sudoku solution is incorrect.
+	private void createPopUpThree(){
 		
 		// Create JFrame, JPanels, JButtons, JLabels, and JTextField.
 		JFrame frame = new JFrame("Message");
@@ -147,7 +150,7 @@ public class PopUpManager {
 		JPanel panel2= new JPanel();
 		JPanel panel3 = new JPanel();
 		JButton button1 = new JButton("Start Over");
-		JButton button2 = new JButton("Exit");
+		JButton button2 = new JButton("Go Back to Game Board");
 		JLabel label1 = new JLabel("Incorrect Solution");
 		
 		// Set layout for the panels as FlowLayout.
@@ -183,6 +186,8 @@ public class PopUpManager {
 		// Provide final details regarding JFrame.
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    frame.setSize(400, 100);
+	    frame.setResizable(false);
+	    frame.setLocation(450,250);
 	    frame.setVisible(true);
 	}
 }

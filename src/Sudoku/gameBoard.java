@@ -23,7 +23,7 @@ public class GameBoard {
 	}
 	
 	// This function creates the game board.
-	public void createGameBoard() {
+	private void createGameBoard() {
 		
 		// Create new JFrame and JPanels.
 		JFrame frame = new JFrame("Sudoku");
@@ -34,11 +34,13 @@ public class GameBoard {
 		panel.setLayout(new GridLayout(9,9));
 		
 		// Add SudokuPanel to Jframe.
-		frame.add(panel, BorderLayout.CENTER);
+		frame.add(panel,BorderLayout.CENTER);
 		
 		// Provide final details regarding JFrame.
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    frame.setSize(680,680);
+	    frame.setSize(635,660);
+	    frame.setLocation(325,600);
+	    frame.setResizable(false);
 	    frame.setVisible(true);
 	}
 }

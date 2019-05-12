@@ -3,13 +3,14 @@ package Sudoku;
 // This class checks whether the sudoku board is correct.
 public class SolutionChecker {
 	
-	public SolutionChecker(String[][] solutionGrid) {
+	protected SolutionChecker(String[][] solutionGrid) {
 		solution(solutionGrid);
 	}
+	
 	/* This function takes in the solution grid and iterates through the rows, columns, and
 	 * 3x3 grids to confirm that there are no repeats of integers.
 	 */
-	public void solution(String[][] solutionGrid){
+	private void solution(String[][] solutionGrid){
 		
 		boolean status = true;
 		

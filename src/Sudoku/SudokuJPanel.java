@@ -24,14 +24,14 @@ public class SudokuJPanel extends JPanel {
 	private String[][]gameStringContents = new String[9][9];
 	private final String location = "//Users//Camille//Documents//COEN275//Assignment1//src/Sudoku//contents.txt";
 	private File file;
-	int currentlySelectedRow;
-	int currentlySelectedCol;
-	SudokuJPanel object = this;
+	private int currentlySelectedRow;
+	private int currentlySelectedCol;
+	private SudokuJPanel object = this;
 	
 	/* This is the constructor for the SudokuJPanel class. It initializes the input file, and initiates ReadContents.
 	 * It also holds the mouse listener.
 	 */
-	public SudokuJPanel(){
+	protected SudokuJPanel(){
 		file = new File(location);
 		readContents();
 		addMouseListener(new MouseAdapter() {
@@ -43,43 +43,19 @@ public class SudokuJPanel extends JPanel {
 				currentlySelectedCol = e.getY() / slotWidth;
 			
 				if(originalStringContents[currentlySelectedRow][currentlySelectedCol].equals("0")) {
-					PopUpManager popUp = new PopUpManager(currentlySelectedRow,currentlySelectedCol,object);
+					PopUpManager popUp = new PopUpManager(object);
 				}
 			}
 		});
 	}
 	
-	// This function updates the data within the SudokoPanel and the gameStringContents array.
-	public void updateData(String num) {
-		gameStringContents[currentlySelectedRow][currentlySelectedCol] = num;
-		boolean boardStatus = false;
-		this.revalidate();
-		this.repaint();
-		for (int i = 0; i < 9; i++) {
-			for (int j = 0; j < 9; j++){
-				if(Integer.parseInt(gameStringContents[i][j]) > 0 && Integer.parseInt(gameStringContents[i][j]) < 10) {
-					continue; 
-				}
-				else {
-					boardStatus = false;
-					return;
-				}
-			}
-		}
-		boardStatus = true;
-		
-		if (boardStatus) {
-			SolutionChecker solution = new SolutionChecker(gameStringContents);
-		}
-		
-	}
-	
 	/* This function reads the input in from the file and separates each value into the 
 	 * gameStringContents array.
 	 */
-	public void readContents() {
+	private void readContents() {
 		final String DELIMITER = ",";
 		String[]values=new String[81];
+		
 		try {
 			BufferedReader bufferedReader = new BufferedReader(new FileReader(file)); //Bufferedreader reads one line.
 			String line = "";
@@ -95,12 +71,38 @@ public class SudokuJPanel extends JPanel {
 	            }  
 	            j++;
 			}
-			
 			bufferedReader.close();	
 		} catch (FileNotFoundException ex) {
 			System.out.println("FileNotFoundException Occurred");
 		} catch (IOException ex) {
 			System.out.println ("IOException Occurred");
+		}
+	}
+	
+	// This function updates the data within the SudokoPanel and the gameStringContents array.
+	protected void updateData(String num) {
+		boolean boardStatus = false;
+		
+		gameStringContents[currentlySelectedRow][currentlySelectedCol] = num;
+		
+		this.revalidate();
+		this.repaint();
+		
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++){
+				if(Integer.parseInt(gameStringContents[i][j]) > 0 && Integer.parseInt(gameStringContents[i][j]) < 10) {
+					continue; 
+				}
+				else {
+					boardStatus = false;
+					return;
+				}
+			}
+		}
+		boardStatus = true;
+		
+		if (boardStatus) {
+			SolutionChecker solution = new SolutionChecker(gameStringContents);
 		}
 	}
 	
@@ -141,16 +143,28 @@ public class SudokuJPanel extends JPanel {
 			}
 		}
 		
-		// Paint the values into the SudokoJPanel from gameStringContents.
-		Font f = new Font("Times New Roman", Font.PLAIN, 26);
+		// Paint the values into the SudokoJPanel from originalStringContents.
+		Font f = new Font("Arial", Font.PLAIN, 24);
 		g2d.setFont(f);
 		FontRenderContext fContext = g2d.getFontRenderContext();
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
-				if(Integer.parseInt(gameStringContents[i][j]) > 0 && Integer.parseInt(gameStringContents[i][j]) < 10) {
-						g2d.setColor(new Color(0,0,255));
-						g2d.drawString(gameStringContents[i][j],((i*70)+25),((j*70)+40));
+				if(Integer.parseInt(originalStringContents[i][j]) > 0 && Integer.parseInt(originalStringContents[i][j]) < 10) {
+						g2d.setColor(new Color(96,96,96));
+						g2d.drawString(originalStringContents[i][j],((i*70)+25),((j*70)+40));
 			
+				}	
+			}
+		}
+		
+		// Paint the values into the SudokoJPanel from gameStringContents.
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				if(Integer.parseInt(gameStringContents[i][j]) != Integer.parseInt(originalStringContents[i][j])){
+					if(Integer.parseInt(gameStringContents[i][j]) > 0 && Integer.parseInt(gameStringContents[i][j]) < 10) {
+							g2d.setColor(new Color(255,0,127));
+							g2d.drawString(gameStringContents[i][j],((i*70)+25),((j*70)+40));
+					}
 				}	
 			}
 		}
