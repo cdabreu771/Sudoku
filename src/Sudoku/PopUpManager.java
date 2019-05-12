@@ -94,6 +94,7 @@ public class PopUpManager {
 		frame.add(panel4, BorderLayout.SOUTH);
 		
 		// Provide final details regarding JFrame.
+		frame.getRootPane().setDefaultButton(button1);
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    frame.setSize(400, 150);
 	    frame.setResizable(false);
@@ -134,6 +135,7 @@ public class PopUpManager {
 		frame.add(panel3, BorderLayout.SOUTH);
 		
 		// Provide final details regarding JFrame.
+		frame.getRootPane().setDefaultButton(button1);
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    frame.setSize(400, 100);
 	    frame.setResizable(false);
@@ -149,8 +151,8 @@ public class PopUpManager {
 		JPanel panel1 = new JPanel();
 		JPanel panel2= new JPanel();
 		JPanel panel3 = new JPanel();
-		JButton button1 = new JButton("Start Over");
-		JButton button2 = new JButton("Go Back to Game Board");
+		JButton button1 = new JButton("Go Back to Game Board");
+		JButton button2 = new JButton("Start Over");
 		JLabel label1 = new JLabel("Incorrect Solution");
 		
 		// Set layout for the panels as FlowLayout.
@@ -166,8 +168,7 @@ public class PopUpManager {
 	    // Add an action listener to button1.
 	    button1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				frame.dispose();
-				GameBoard newGame = new GameBoard();
+				frame.dispose();	
 			}
 		});
 	    
@@ -175,6 +176,7 @@ public class PopUpManager {
 	    button2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				frame.dispose();
+				GameBoard newGame = new GameBoard();
 			}
 		});
 	    
@@ -184,6 +186,7 @@ public class PopUpManager {
 		frame.add(panel3, BorderLayout.SOUTH);
 		
 		// Provide final details regarding JFrame.
+		frame.getRootPane().setDefaultButton(button1);
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    frame.setSize(400, 100);
 	    frame.setResizable(false);
