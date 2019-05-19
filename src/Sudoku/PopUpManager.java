@@ -31,6 +31,10 @@ public class PopUpManager {
 		}
 	}
 	
+	protected PopUpManager(String message)
+	{
+		createPopUpFour(message);
+	}
 	/* This function handles pop-up one. It allows for the user to input a number into the
 	 * Sudoku board.
 	 */
@@ -177,6 +181,46 @@ public class PopUpManager {
 			public void actionPerformed(ActionEvent event) {
 				frame.dispose();
 				GameBoard newGame = new GameBoard();
+			}
+		});
+	    
+	    // Add JPanels to JFrame using BorderLayout.
+		frame.add(panel1, BorderLayout.EAST);
+		frame.add(panel2, BorderLayout.CENTER);
+		frame.add(panel3, BorderLayout.SOUTH);
+		
+		// Provide final details regarding JFrame.
+		frame.getRootPane().setDefaultButton(button1);
+	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    frame.setSize(400, 100);
+	    frame.setResizable(false);
+	    frame.setLocation(450,250);
+	    frame.setVisible(true);
+	}
+	
+private void createPopUpFour(String message){
+		
+		// Create JFrame, JPanels, JButtons, JLabels, and JTextField.
+		JFrame frame = new JFrame("Message");
+		JPanel panel1 = new JPanel();
+		JPanel panel2= new JPanel();
+		JPanel panel3 = new JPanel();
+		JButton button1 = new JButton("OK");
+		JLabel label1 = new JLabel(message);
+	
+		// Set layout for the panels as FlowLayout.
+		panel1.setLayout(new FlowLayout());
+		panel2.setLayout(new FlowLayout());
+		panel3.setLayout(new FlowLayout());
+		
+	    // Add JLabel, JTextField, and JButtons to JPanels.
+	    panel2.add(label1);
+	    panel3.add(button1);
+	    
+	    // Add an action listener to button1.
+	    button1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				frame.dispose();
 			}
 		});
 	    
