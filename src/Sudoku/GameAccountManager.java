@@ -3,9 +3,9 @@ package Sudoku;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -83,4 +83,34 @@ public class GameAccountManager {
 		return false;
 	}
 
+	protected void writeDB() {
+		try {
+			FileOutputStream writer = new FileOutputStream(file,false); //false because we do not 
+			//want to append (add duplicates) to the original file
+			
+			
+			for (int i = 0; i < list.size(); i ++) {
+				StringBuilder account = new StringBuilder();
+				account.append(list.get(i).getPlayerName());
+				account.append(", ");
+				account.append(list.get(i).getPassword());
+				account.append(", ");
+				account.append(list.get(i).getGamesPlayed());
+				account.append(", ");
+				account.append(list.get(i).getGamesWon());
+				account.append(", ");
+				account.append(list.get(i).getGamesLost());
+				account.append(", ");
+				account.append(list.get(i).getTotalScore());
+				account.append("\n");
+				
+				writer.write(account.toString().getBytes());
+			}
+			return;
+		} catch(FileNotFoundException ex) { 
+			System.out.println("FileNotFoundException occurred.");
+		} catch (IOException ex) {
+			System.out.println("IOException occurred.");
+		}
+	}
 }

@@ -1,9 +1,11 @@
 package Sudoku;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,17 +25,42 @@ public class GameBoard {
 	// This function creates the game board.
 	private void createGameBoard() {
 		
+		BufferedImage image = null;
+		try {
+			image = ImageIO.read(new File("//Users//Camille//Documents//COEN275//Assignment1//src//Sudoku//sudoku.png"));
+		} catch (IOException ex) { System.out.print("IOException Occurred");
+			ex.printStackTrace();
+		}
+		
+		
+		
 		GameAccountManager account = new GameAccountManager();
 		
-		// Create new JFrame and JPanels.
+		// Start Game Screen
 		JFrame startFrame = new JFrame();
-		JPanel startPanel = new JPanel();
-		JFrame frame = new JFrame("Sudoku");
+		JPanel startPanelR = new JPanel();
+		JPanel startPanelL = new JPanel();
 		JPanel startPanel1 = new JPanel();
 		JPanel startPanel2 = new JPanel();
 		JPanel startPanel3 = new JPanel();
 		JPanel startPanel4 =new JPanel();
+		//JLabel test = new JLabel("test");
+		JLabel imageLabel = new JLabel();
+		imageLabel.setSize(300,300);
 		
+		Image dimage = image.getScaledInstance(imageLabel.getWidth(), imageLabel.getHeight(),
+		        Image.SCALE_SMOOTH);
+		
+		ImageIcon icon = new ImageIcon(dimage);
+		
+		imageLabel.setIcon(icon);
+		
+		// Set left start game screen
+		startPanelL.setLayout(new GridBagLayout());
+		startPanelL.add(imageLabel);
+		
+		// Sudoku Game Screen
+		JFrame frame = new JFrame("Sudoku");
 		SudokuJPanel panel = new SudokuJPanel();
 		
 		Font font = new Font("Arial", Font.BOLD,26);
@@ -53,14 +80,13 @@ public class GameBoard {
 		text2.setText("");
 		
 		JButton button1 = new JButton("Login");
-		
-		
-		
+		startPanelR.setSize(340,660);
+		startPanelL.setSize(340,660);
 		// Set size and layout for SudokuPanel.
-		startPanel1.setSize(190, 100);
-		startPanel2.setSize(190, 100);
-		startPanel3.setSize(190, 100);
-		startPanel4.setSize(190, 100);
+		startPanel1.setSize(85, 100);
+		startPanel2.setSize(85, 100);
+		startPanel3.setSize(85, 100);
+		startPanel4.setSize(85, 100);
 		
 		startPanel1.setLayout(new FlowLayout());
 		startPanel2.setLayout(new FlowLayout());
@@ -74,22 +100,25 @@ public class GameBoard {
 		startPanel3.add(text2);
 		startPanel4.add(button1);
 		
-		startPanel.setLayout(new BoxLayout(startPanel, BoxLayout.Y_AXIS));
+		startPanelR.setLayout(new BoxLayout(startPanelR, BoxLayout.Y_AXIS));
 		startPanel1.setLayout(new FlowLayout());
 		startPanel2.setLayout(new FlowLayout());
 		startPanel3.setLayout(new FlowLayout());
 		startPanel4.setLayout(new FlowLayout());
 		
 		
-		startPanel.add(startPanel1);
-		startPanel.add(startPanel2);
-		startPanel.add(startPanel3);
-		startPanel.add(startPanel4);
+		startPanelR.add(startPanel1);
+		startPanelR.add(startPanel2);
+		startPanelR.add(startPanel3);
+		startPanelR.add(startPanel4);
 		
-		startFrame.add(startPanel);
+		GridLayout layout = new GridLayout(0,2);
+		startFrame.setLayout(layout);
+		startFrame.add(startPanelL);
+		startFrame.add(startPanelR);
 		
 		startFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    startFrame.setSize(635,660);
+	    startFrame.setSize(900,500);
 	    startFrame.setLocation(325,600);
 	    startFrame.setResizable(false);
 	    startFrame.setVisible(true);
