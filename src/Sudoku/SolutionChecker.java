@@ -4,6 +4,12 @@ package Sudoku;
 public class SolutionChecker {
 	GameBoard board = null;
 	private GameAccount account = new GameAccount();
+	boolean status = true;
+	int score = 0;
+	protected SolutionChecker(GameAccount account)
+	{
+		this.account=account;
+	}
 	protected SolutionChecker(String[][] solutionGrid, GameAccount account, GameBoard board) {
 		this.board = board;
 		this.account = account;
@@ -16,7 +22,6 @@ public class SolutionChecker {
 	 */
 	private void solution(String[][] solutionGrid, GameBoard board){
 		
-		boolean status = true;
 		account.incrementGamesPlayed();
 		
 		// Check rows for duplicates
@@ -53,14 +58,23 @@ public class SolutionChecker {
 				}
 			}
 		}
+	}
+	
+	protected void setScore(int minutes, int seconds) {
 		if (status) {
 			account.incrementGamesWon();
-			account.setTotalScore(500);
+			score += 500;
+			int minsLeft = 29 - minutes;
+			int secsLeft = 60 - seconds;
+			score += (minsLeft * 60) + secsLeft;
+			
 		}
 		else {
 			account.incrementGamesLost();
+			score = 0;
 		}
 		
+		account.setTotalScore(score);
 		PopUpManager popUp = new PopUpManager(status,account,board);
 	}
 }

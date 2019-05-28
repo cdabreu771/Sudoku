@@ -41,7 +41,7 @@ public class GameBoard {
 	JLabel label9 = null;
 	JPanel RPanel = null;
 	SudokuJPanel sudokuPanel = null;
-	
+	SolutionChecker check = null;
 	Thread thread;
 	
 	// This is the constructor for the GameBoard. It calls createGameBoard().
@@ -52,9 +52,11 @@ public class GameBoard {
 	// This is the constructor for the GameBoard. It calls createGameBoard().
 	protected GameBoard(GameAccount account, boolean status) {
 		this.account = account;
+		check = new SolutionChecker(account);
 		resetGameBoard();
 }
 	protected GameBoard(GameAccount account) {
+		check = new SolutionChecker(account);
 		createGameBoard();
 	}
 	
@@ -275,21 +277,12 @@ public class GameBoard {
 	protected void stopTimer(boolean status) {
 		if (status) {
 			thread.stop();
-			int minsLeft = 30 - minutes;
-			int secsLeft = 60 - seconds;
-			score = (minsLeft * 60) + secsLeft;
+			check.setScore(minutes,seconds);
 		}
-		else {
-			score = 0;
-		}
-		account.setTotalScore(score);
-		
-		
 	}
 	public void resetGameBoard() {
 		stopTimer(true);
 		RPanel.setVisible(false);
-		//label2b.setText(account.getPlayerName());
 		label3b.setText(Integer.toString(account.getGamesPlayed()));
 		label4b.setText(Integer.toString(account.getGamesWon()));
 		label5b.setText(Integer.toString(account.getGamesLost()));
