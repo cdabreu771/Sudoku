@@ -1,10 +1,12 @@
 package Sudoku;
 
 // This class handles the game board. It includes main.
-public class GameBoardManager {
+public class GameManager {
 	
 	// This is the main for the Sudoku game.
 	public static void main(String[] args) {	
-		GameBoard newGame = new GameBoard();
+		LogInScreen newGame = new LogInScreen();
+		
 	}
 }
+

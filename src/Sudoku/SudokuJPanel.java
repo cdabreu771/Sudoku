@@ -22,16 +22,22 @@ import javax.swing.SwingConstants;
 public class SudokuJPanel extends JPanel {
 	private String[][]originalStringContents = new String[9][9];
 	private String[][]gameStringContents = new String[9][9];
+	private String[][]resetContents = new String[9][9]; 
 	private final String location = "//Users//Camille//Documents//COEN275//Assignment1//src/Sudoku//contents.txt";
 	private File file;
 	private int currentlySelectedRow;
 	private int currentlySelectedCol;
 	private SudokuJPanel object = this;
+	private GameAccount account = new GameAccount();
+	Color gridColor = Color.white;
+	GameBoard board = null;
 	
 	/* This is the constructor for the SudokuJPanel class. It initializes the input file, and initiates ReadContents.
 	 * It also holds the mouse listener.
 	 */
-	protected SudokuJPanel(){
+	protected SudokuJPanel(GameAccount account, GameBoard board){
+		this.board = board;
+		this.account = account;
 		file = new File(location);
 		readContents();
 		addMouseListener(new MouseAdapter() {
@@ -68,6 +74,7 @@ public class SudokuJPanel extends JPanel {
 	            for (int i = 0; i < values.length; i++) {
 	            	gameStringContents[i][j]= values[i];
 	            	originalStringContents[i][j]=values[i];
+	            	resetContents[i][j] = values[i];
 	            }  
 	            j++;
 			}
@@ -102,28 +109,42 @@ public class SudokuJPanel extends JPanel {
 		boardStatus = true;
 		
 		if (boardStatus) {
-			SolutionChecker solution = new SolutionChecker(gameStringContents);
+			board.stopTimer(true);
+			SolutionChecker solution = new SolutionChecker(gameStringContents, account, board);
 		}
 	}
 	
+	protected void resetOriginalContents() {
+		gameStringContents = resetContents;
+	}
+	
+	
+	protected void changeColor(Color color) {
+		this.revalidate();
+		gridColor = color;
+		this.repaint();
+	}
 	// This function handles the graphics within the SudokuJPanels, including the borders and painting of values.
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
 		
 		// Set the color of the SudokoJPanel and grid.
-		g2d.setColor(new Color(224,224,224));
+		//g2d.setColor(new Color(224,224,224));
 		g2d.setColor(new Color(255,255,255));
+		
+		
+		/// g2d.drawLabel(label9)
 		
 		// Set the stroke width for the vertical grid.
 		for(int x = 0;x <= 630;x+=70) {
 			if((x % 210) == 0) {
-				g2d.setColor(new Color(255,255,255));
+				g2d.setColor(gridColor);
 				g2d.setStroke(new BasicStroke(10));
 				g2d.drawLine(x, 0, x, 630);
 			}
 			else {
-				g2d.setColor(new Color(255,255,255));
+				g2d.setColor(gridColor);
 				g2d.setStroke(new BasicStroke(2));
 				g2d.drawLine(x, 0, x, 630);
 			}
@@ -132,12 +153,12 @@ public class SudokuJPanel extends JPanel {
 		// Set the stroke width for the horizontal grid.
 		for(int y = 0;y <= 630;y+=70) {
 			if((y % 210) == 0) {
-				g2d.setColor(new Color(255,255,255));
+				g2d.setColor(gridColor);
 				g2d.setStroke(new BasicStroke(10));
 				g2d.drawLine(0, y, 630, y);
 				}
 			else {
-				g2d.setColor(new Color(255,255,255));
+				g2d.setColor(gridColor);
 				g2d.setStroke(new BasicStroke(2));
 				g2d.drawLine(0, y, 630, y);
 			}

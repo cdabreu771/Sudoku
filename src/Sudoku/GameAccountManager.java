@@ -15,7 +15,7 @@ import Sudoku.GameAccount;
 public class GameAccountManager {
 	
 	private ArrayList<GameAccount> list = new ArrayList<GameAccount>();
-	private final String location = "//Users//Camille//Documents//COEN275//Assignment1//src//Sudoku//PlayerDB";
+	private final String location = "//Users//Camille//Documents//COEN275//Assignment1//src//Sudoku//PlayerDB.txt";
 	private Scanner scanner = new Scanner(System.in);
 	private File file;
 	
@@ -37,7 +37,7 @@ public class GameAccountManager {
 				GameAccount gameAccount = null;
 				
 				if(accountinfo.length == 6) {	// string.length() array.length <-- if array is of single variables
-					 gameAccount = new GameAccount(accountinfo[0], accountinfo[1],Integer.parseInt(accountinfo[2]),
+					 gameAccount = new GameAccount(accountinfo[0], (accountinfo[1]).toCharArray(),Integer.parseInt(accountinfo[2]),
 							 Integer.parseInt(accountinfo[3]), Integer.parseInt(accountinfo[4]),Integer.parseInt(accountinfo[5]));
 				}
 				else {
@@ -55,35 +55,39 @@ public class GameAccountManager {
 		}
 	}
 	
-	protected boolean logIn(String userName, String password) {
+	protected GameAccount logIn(String userName, char[] password) {
 		
 		
 		GameAccount usersAccount = null;
 		
-		for (int i = 0; i < list.size(); i ++) { // arrayList.size() <-- if array is of objects
-			GameAccount gameAccount = list.get(i);  //<-- arrayList.get(i), array[i]
-			if(gameAccount.getPlayerName().equals(userName)) {
-				usersAccount = gameAccount;
-				break;
+		
+		
+			for (int i = 0; i < list.size(); i ++) { // arrayList.size() <-- if array is of objects
+				GameAccount gameAccount = list.get(i);  //<-- arrayList.get(i), array[i]
+				if(gameAccount.getPlayerName().equals(userName)) {
+					usersAccount = gameAccount;
+					break;
+				}
 			}
-		}
-		
-		if(usersAccount == null) {
-			PopUpManager popUp = new PopUpManager("Error: Incorrect Username Entered");
-			return false;
-		}
-		
 			
-		if (usersAccount.checkPassword(password)) {
-			return true;
-		
-		}
-		
-		PopUpManager popUp = new PopUpManager("Error: Invalid Password Entered");
-		return false;
+			if(usersAccount == null) {
+				PopUpManager popUp = new PopUpManager("Error: Incorrect Username Entered");
+				return usersAccount;
+			}
+			
+				
+			if (usersAccount.checkPassword(password)) {
+				//gAccount = usersAccount;
+				return usersAccount;
+				
+			}
+			
+			PopUpManager popUp = new PopUpManager("Error: Incorrect Password Entered");
+			usersAccount = null;
+			return usersAccount;
 	}
 
-	protected void writeDB() {
+	protected void writeDB(GameAccount gAccount) {
 		try {
 			FileOutputStream writer = new FileOutputStream(file,false); //false because we do not 
 			//want to append (add duplicates) to the original file

@@ -1,14 +1,20 @@
 package Sudoku;
 
+import java.util.Arrays;
+
 public class GameAccount {
 	private String playerName;
-	private String password;
+	private char[] password;
 	private int gamesPlayed;
 	private int gamesWon;
 	private int gamesLost;
 	private int totalScore;
+	
+protected GameAccount() {
+	
+}
 
-protected GameAccount(String playerName, String password, int gamesPlayed, int gamesWon, int gamesLose, int totalScore) {
+protected GameAccount(String playerName, char[] password, int gamesPlayed, int gamesWon, int gamesLose, int totalScore) {
 	this.playerName = playerName;
 	this.password = password;
 	this.gamesPlayed = gamesPlayed;
@@ -24,7 +30,7 @@ protected GameAccount(String playerName, String password, int gamesPlayed, int g
 	}
 	
 	// This function accesses the pin for the bank account.
-	protected String getPassword() {
+	protected char[] getPassword() {
 		return password;
 	}
 	
@@ -46,26 +52,26 @@ protected GameAccount(String playerName, String password, int gamesPlayed, int g
 		return totalScore;
 	}
 	
-	protected void setGamesPlayed(int num) {
-		gamesPlayed = num;
-	}
-	
-	protected void setGamesWon(int num) {
-		gamesWon = num;
-	}
-	protected void setGamesLost(int num) {
-		gamesLost = num;
-	}
-	protected void setTotalScore(int num) {
-		totalScore = num;
-	}
-	
-	protected boolean checkPassword(String pin) {
-		if(password.equals(pin)) {
+	protected boolean checkPassword(char[] pin) {
+		if(Arrays.equals(password, pin)) {
 			return true;
 		}
 		return false;
 	}
+	protected void incrementGamesPlayed() {
+		gamesPlayed++;
+	}
+	protected void incrementGamesWon() {
+		gamesWon++;
+	}
+	
+	protected void incrementGamesLost() {
+		gamesLost++;
+	}
+	protected void setTotalScore(int num) {
+		totalScore += num;
+	}
+	
 	@Override
 	public String toString() {
 		return playerName + "," + password + "," + gamesPlayed + "," + gamesWon + "," + gamesLost

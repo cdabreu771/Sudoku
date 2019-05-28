@@ -2,17 +2,22 @@ package Sudoku;
 
 // This class checks whether the sudoku board is correct.
 public class SolutionChecker {
-	
-	protected SolutionChecker(String[][] solutionGrid) {
-		solution(solutionGrid);
+	GameBoard board = null;
+	private GameAccount account = new GameAccount();
+	protected SolutionChecker(String[][] solutionGrid, GameAccount account, GameBoard board) {
+		this.board = board;
+		this.account = account;
+		solution(solutionGrid, board);
+		
 	}
 	
 	/* This function takes in the solution grid and iterates through the rows, columns, and
 	 * 3x3 grids to confirm that there are no repeats of integers.
 	 */
-	private void solution(String[][] solutionGrid){
+	private void solution(String[][] solutionGrid, GameBoard board){
 		
 		boolean status = true;
+		account.incrementGamesPlayed();
 		
 		// Check rows for duplicates
 		for(int i = 0; i < 9; i++) {
@@ -48,8 +53,15 @@ public class SolutionChecker {
 				}
 			}
 		}
-		   
-		PopUpManager popUp = new PopUpManager(status);
+		if (status) {
+			account.incrementGamesWon();
+			account.setTotalScore(500);
+		}
+		else {
+			account.incrementGamesLost();
+		}
+		
+		PopUpManager popUp = new PopUpManager(status,account,board);
 	}
 }
 

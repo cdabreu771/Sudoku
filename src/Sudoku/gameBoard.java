@@ -11,144 +11,303 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.InputMismatchException;
 
 
 // This class creates the UI for the GameBoard
 public class GameBoard {
-
+	private static final Color WHITE = Color.WHITE;
+	private static final Color GREEN = Color.GREEN;
+	private static final Color ORANGE = Color.ORANGE;
+	GameAccount account = new GameAccount();
+	Timer timer;
+	int mseconds = 0;
+	int seconds = 0;
+	int minutes = 0;
+	int score = 0;
+	String mSecondsString = "00";
+    String secondsString = "00";
+    String minutesString = "00";
+	JLabel label2a = null;
+	JLabel label2b = null;
+	JLabel label3a = null;
+	JLabel label3b = null;
+	JLabel label4a = null;
+	JLabel label4b = null;
+	JLabel label5a = null;
+	JLabel label5b = null;
+	JLabel label6a = null;
+	JLabel label6b = null;
+	JLabel label9 = null;
+	JPanel RPanel = null;
+	SudokuJPanel sudokuPanel = null;
+	
+	Thread thread;
+	
 	// This is the constructor for the GameBoard. It calls createGameBoard().
-	protected GameBoard() {
-		
+	//protected GameBoard(GameAccount account) {
+	//	this.account = account;
+	//	createGameBoard();
+	//}
+	// This is the constructor for the GameBoard. It calls createGameBoard().
+	protected GameBoard(GameAccount account, boolean status) {
+		this.account = account;
+		resetGameBoard();
+}
+	protected GameBoard(GameAccount account) {
 		createGameBoard();
 	}
 	
 	// This function creates the game board.
 	private void createGameBoard() {
 		
-		BufferedImage image = null;
-		try {
-			image = ImageIO.read(new File("//Users//Camille//Documents//COEN275//Assignment1//src//Sudoku//sudoku.png"));
-		} catch (IOException ex) { System.out.print("IOException Occurred");
-			ex.printStackTrace();
-		}
-		
-		
-		
-		GameAccountManager account = new GameAccountManager();
-		
-		// Start Game Screen
-		JFrame startFrame = new JFrame();
-		JPanel startPanelR = new JPanel();
-		JPanel startPanelL = new JPanel();
-		JPanel startPanel1 = new JPanel();
-		JPanel startPanel2 = new JPanel();
-		JPanel startPanel3 = new JPanel();
-		JPanel startPanel4 =new JPanel();
-		//JLabel test = new JLabel("test");
-		JLabel imageLabel = new JLabel();
-		imageLabel.setSize(300,300);
-		
-		Image dimage = image.getScaledInstance(imageLabel.getWidth(), imageLabel.getHeight(),
-		        Image.SCALE_SMOOTH);
-		
-		ImageIcon icon = new ImageIcon(dimage);
-		
-		imageLabel.setIcon(icon);
-		
-		// Set left start game screen
-		startPanelL.setLayout(new GridBagLayout());
-		startPanelL.add(imageLabel);
-		
 		// Sudoku Game Screen
 		JFrame frame = new JFrame("Sudoku");
-		SudokuJPanel panel = new SudokuJPanel();
+		JPanel LPanel = new JPanel();
+		LPanel.setBounds(0,0,300,800);
+		RPanel = new JPanel();
+		RPanel.setBounds(300,0,690,800);
+		JPanel LPanelTop = new JPanel();
+		LPanelTop.setBounds(0,0,300,300);
+		JPanel LPanelCenter = new JPanel();
+		LPanelCenter.setBounds(0,300,300,200);
+		JPanel LPanelBottom = new JPanel();
+		LPanelBottom.setBounds(0,500,300,300);
+		sudokuPanel = new SudokuJPanel(account, this);
 		
-		Font font = new Font("Arial", Font.BOLD,26);
-		JLabel label1 = new JLabel("Sign In");
-		label1.setFont(font);
+		frame.setLayout(null);
+		LPanel.setLayout(null);
+		LPanelTop.setLayout(null);
 	
-		Font font1 = new Font("Arial",Font.PLAIN,14);
-		JLabel label2 = new JLabel("Username:");
-		label2.setFont(font1);
-		JLabel label3 = new JLabel("Password:");
-		label3.setFont(font1);
+		LPanelCenter.setLayout(new BoxLayout(LPanelCenter,BoxLayout.Y_AXIS));
+		LPanelBottom.setLayout(new BoxLayout(LPanelBottom,BoxLayout.Y_AXIS));
+		//LPanelBottom.setLayout(null);
+		RPanel.setLayout(null);
 		
-		final int FINAL_WIDTH = 10;
-		JTextField text1 = new JTextField(FINAL_WIDTH);
-		text1.setText("");
-		JTextField text2 = new JTextField(FINAL_WIDTH);
-		text2.setText("");
+		// Left Top Panel: Scoreboard
+		Font font1 = new Font("Arial", Font.BOLD,26);
+		JLabel label1 = new JLabel("Scoreboard");
+		label1.setBounds(0,0,300,50);
+		label1.setFont(font1);
+		label1.setHorizontalAlignment(JLabel.CENTER);
+	    label1.setVerticalAlignment(JLabel.CENTER);
+
+		label2a = new JLabel("Player Name:");
+		label2a.setBounds(5,50,200,50);
+		label2b = new JLabel(account.getPlayerName());
+		label2b.setBounds(200,50,50,50);
+		label3a = new JLabel("Number of Games Played:");
+		label3a.setBounds(5,100,200,50);
+		label3b = new JLabel(Integer.toString(account.getGamesPlayed()));
+		label3b.setBounds(200,100,50,50);
+		label4a = new JLabel("Number of Games Won:");
+		label4a.setBounds(5,150,200,50);
+		label4b = new JLabel(Integer.toString(account.getGamesWon()));
+		label4b.setBounds(200,150,50,50);
+		label5a = new JLabel("Number of Games Lost:");
+		label5a.setBounds(5,200,200,50);
+		label5b = new JLabel(Integer.toString(account.getGamesLost()));
+		label5b.setBounds(200,200,50,50);
+		label6a = new JLabel("Total Score:");
+		label6a.setBounds(5,250,200,50);
+		label6b = new JLabel(Integer.toString(account.getTotalScore()));
+		label6b.setBounds(200,250,50,50);
 		
-		JButton button1 = new JButton("Login");
-		startPanelR.setSize(340,660);
-		startPanelL.setSize(340,660);
-		// Set size and layout for SudokuPanel.
-		startPanel1.setSize(85, 100);
-		startPanel2.setSize(85, 100);
-		startPanel3.setSize(85, 100);
-		startPanel4.setSize(85, 100);
+		LPanelTop.add(label1);
+		LPanelTop.add(label2a);
+		LPanelTop.add(label2b);
+		LPanelTop.add(label3a);
+		LPanelTop.add(label3b);
+		LPanelTop.add(label4a);
+		LPanelTop.add(label4b);
+		LPanelTop.add(label5a);
+		LPanelTop.add(label5b);
+		LPanelTop.add(label6a);
+		LPanelTop.add(label6b);
 		
-		startPanel1.setLayout(new FlowLayout());
-		startPanel2.setLayout(new FlowLayout());
-		startPanel3.setLayout(new FlowLayout());
-		startPanel4.setLayout(new FlowLayout());
+		// Left Center Panel: Board Color
+		JLabel label7 = new JLabel("Board Color");
+		label7.setBounds(0,300,300,50);
+		label7.setHorizontalAlignment(JLabel.CENTER);
+	    label7.setVerticalAlignment(JLabel.CENTER);
+		label7.setFont(font1);
 		
-		startPanel1.add(label1);
-		startPanel2.add(label2);
-		startPanel2.add(text1);
-		startPanel3.add(label3);
-		startPanel3.add(text2);
-		startPanel4.add(button1);
-		
-		startPanelR.setLayout(new BoxLayout(startPanelR, BoxLayout.Y_AXIS));
-		startPanel1.setLayout(new FlowLayout());
-		startPanel2.setLayout(new FlowLayout());
-		startPanel3.setLayout(new FlowLayout());
-		startPanel4.setLayout(new FlowLayout());
-		
-		
-		startPanelR.add(startPanel1);
-		startPanelR.add(startPanel2);
-		startPanelR.add(startPanel3);
-		startPanelR.add(startPanel4);
-		
-		GridLayout layout = new GridLayout(0,2);
-		startFrame.setLayout(layout);
-		startFrame.add(startPanelL);
-		startFrame.add(startPanelR);
-		
-		startFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    startFrame.setSize(900,500);
-	    startFrame.setLocation(325,600);
-	    startFrame.setResizable(false);
-	    startFrame.setVisible(true);
-		
-	    final boolean flag = false;
-		button1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				String userName = text1.getText();
-				String password = text2.getText();
-				
-				boolean flag = account.logIn(userName,password);
-				
-				if(flag) {
-					startFrame.dispose();
-					panel.setSize(680,680);
-					panel.setLayout(new GridLayout(9,9));
-					
-					// Add SudokuPanel to Jframe.
-					frame.add(panel,BorderLayout.CENTER);
-					
-					// Provide final details regarding JFrame.
-					
-					frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				    frame.setSize(635,660);
-				    frame.setLocation(325,600);
-				    frame.setResizable(false);
-				    frame.setVisible(true);
-				}
+		String[] options = {"White","Green","Orange"};
+		JComboBox<String> colorSelection = new JComboBox<String>(options);
+		colorSelection.setMaximumSize( colorSelection.getPreferredSize() );
+		((JLabel) colorSelection.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
+		colorSelection.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String color = (String) colorSelection.getSelectedItem();
+			if(color.equals("White")) {
+				sudokuPanel.changeColor(WHITE);
+			}
+			else if(color.equals("Green")) {
+				sudokuPanel.changeColor(GREEN);
+			}
+			else if(color.equals("Orange")) {
+				sudokuPanel.changeColor(ORANGE);
+			}
 			}
 		});
+			
+		LPanelCenter.add(label7);
+		LPanelCenter.add(colorSelection);
+		
+		// Left Panel Bottom: Timer
+		JLabel label8 = new JLabel("Timer");
+		label8.setBounds(0,600,300,50);
+		label8.setHorizontalAlignment(JLabel.CENTER);
+	    label8.setVerticalAlignment(JLabel.CENTER);
+		label8.setFont(font1);
+		label8.setAlignmentX(Component.CENTER_ALIGNMENT);
+		label9 = new JLabel("00:" + "00:" + "00:" + "00");
+		Font font2 = new Font("Arial", Font.PLAIN, 20);
+		label9.setBounds(0,650,300,50);
+		label9.setHorizontalAlignment(JLabel.CENTER);
+	    label9.setVerticalAlignment(JLabel.CENTER);
+	    label9.setFont(font2);
+	    label9.setAlignmentX(Component.CENTER_ALIGNMENT);
+	    
+	    JButton button1 = new JButton("Play Now");
+		button1.setBounds(0,700,300,50);
+		button1.setHorizontalAlignment(JButton.CENTER);
+		button1.setVerticalAlignment(JButton.CENTER);
+		button1.setAlignmentX(Component.CENTER_ALIGNMENT);
+		button1.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                 thread = new Thread() {
+                    public void run() {
+                        try {
+                            long elapsedTime = 0;
+                            long startTime = System.currentTimeMillis();
+                     
+
+                            while (elapsedTime < 1800001) {
+
+                                elapsedTime = System.currentTimeMillis() - startTime;
+                                try {
+                                	sleep(1);
+                                } catch(InterruptedException exception) {
+                                	System.out.println("Interrupted");
+                                }
+                                mseconds = (int) (elapsedTime % 1000);
+
+                                if (mseconds + 1 == 1000) {
+                                    mseconds = 0;
+                                    seconds++;
+                                }
+
+                                if (seconds == 60) {
+                                    mseconds = 0;
+                                    seconds = 0;
+                                    minutes++;
+                                }
+
+                                if (mseconds < 10) {
+                                    mSecondsString = "0" + mseconds;
+                                } else {
+                                    mSecondsString = String.valueOf(mseconds);
+                                }
+
+                                if (seconds < 10) {
+                                    secondsString = "0" + seconds;
+                                } else {
+                                    secondsString = String.valueOf(seconds);
+                                }
+
+                                if (minutes < 10) {
+                                    minutesString = "0" + minutes;
+                                }else {
+                                    minutesString = String.valueOf(minutes);
+                                }
+
+                                label9.setText("00:   " + minutesString + "  :   " + secondsString + "  :   " + mSecondsString);
+                            }
+
+                        }catch(Exception exception) {
+                            exception.printStackTrace();
+                        }
+                    }
+                };
+        
+                thread.start();
+                RPanel.setVisible(true);
+			}
+           // stopTimer(false);
+		});
+		
+		
+		LPanelBottom.add(label8);
+		LPanelBottom.add(label9);
+		LPanelBottom.add(button1);
+		
+		
+		LPanel.add(LPanelTop);
+		LPanel.add(LPanelCenter);
+		LPanel.add(LPanelBottom);
+		
+		// Right Panel: Sudoku Board
+		JLabel label10 = new JLabel("Sudoku");
+		label10.setHorizontalAlignment(JLabel.CENTER);
+		label10.setVerticalAlignment(JLabel.CENTER);
+		label10.setBounds(0,0,680,30);
+		label10.setFont(font1);
+		
+		sudokuPanel.setBounds(20,30,680,680);
+		sudokuPanel.setLayout(new GridLayout(9,9));
+
+		RPanel.add(label10);
+		RPanel.add(sudokuPanel);
+		
+		frame.add(LPanel);
+		frame.add(RPanel);
+		RPanel.setVisible(false);
+	
+		// Provide final details regarding JFrame.
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    frame.setSize(975,700);
+	    frame.setLocation(325,600);
+	    frame.setResizable(false);
+	    frame.setVisible(true);
+	}
+	
+	protected void stopTimer(boolean status) {
+		if (status) {
+			thread.stop();
+			int minsLeft = 30 - minutes;
+			int secsLeft = 60 - seconds;
+			score = (minsLeft * 60) + secsLeft;
+		}
+		else {
+			score = 0;
+		}
+		account.setTotalScore(score);
+		
+		
+	}
+	public void resetGameBoard() {
+		stopTimer(true);
+		RPanel.setVisible(false);
+		//label2b.setText(account.getPlayerName());
+		label3b.setText(Integer.toString(account.getGamesPlayed()));
+		label4b.setText(Integer.toString(account.getGamesWon()));
+		label5b.setText(Integer.toString(account.getGamesLost()));
+		label6b.setText(Integer.toString(account.getTotalScore()));
+		label9.setText("00:" + "00:" + "00:" + "00");
+		mSecondsString = "00";
+        secondsString = "00";
+        minutesString = "00";
+        mseconds = 0;
+        seconds = 0;
+        minutes = 0;
+		
+		long elapsedTime = 0;
+        long startTime = System.currentTimeMillis();
+        
+        sudokuPanel.resetOriginalContents();
+       
+		
 	}
 }
 
