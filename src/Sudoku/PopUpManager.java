@@ -1,19 +1,17 @@
 package Sudoku;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.NumberFormat;
 import java.util.InputMismatchException;
-
 import javax.swing.*;
 
 // This class holds all the pop-ups for the game.
 public class PopUpManager {
-	GameBoard board = null;
-	GameAccount account = new GameAccount();
-	GameAccountManager accountManager = new GameAccountManager();
+	private GameBoard board = null;
+	private GameAccount account = null;
 	
 	// This is the constructor for the PopUpManager. It calls createPopUpOne().
 	protected PopUpManager(SudokuJPanel panel)
@@ -29,22 +27,23 @@ public class PopUpManager {
 		this.board = board;
 		this.account = account;
 		if(status == true) {
-			createPopUpTwo();
+			createPopUpTwo(account,board);
 		}
 		else {
 			createPopUpThree(account,board);
 		}
 	}
 	
+	// This is the constructor for the PopUpManager that takes in a String message and calls createPopUpFour().
 	protected PopUpManager(String message)
 	{
 		createPopUpFour(message);
 	}
+	
 	/* This function handles pop-up one. It allows for the user to input a number into the
 	 * Sudoku board.
 	 */
 	private void createPopUpOne(SudokuJPanel panel){
-		
 		// Create JFrame, JPanels, JButtons, JLabels, and JTextField.
 		JFrame frame = new JFrame("Input");
 		JPanel panel1 = new JPanel();
@@ -71,7 +70,6 @@ public class PopUpManager {
 	    // Add an action listener to button1.
 	    button1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-	
 				try {
 					String num = textField.getText();
 					if (Integer.parseInt(num) > 0 && Integer.parseInt(num) < 10) {
@@ -112,8 +110,7 @@ public class PopUpManager {
 	}
 	
 	// This function handles pop-up two. It displays a message if the Sudoku solution is correct.
-	private void createPopUpTwo(){
-		
+	private void createPopUpTwo(GameAccount account, GameBoard board){
 		// Create JFrame, JPanels, JButtons, JLabels, and JTextField.
 		JFrame frame = new JFrame("Message");
 		JPanel panel1 = new JPanel();
@@ -122,12 +119,23 @@ public class PopUpManager {
 		JButton button1 = new JButton("OK");
 		JButton button2 = new JButton("Play Again");
 		JLabel label1 = new JLabel("You won the Sudoku!");
-		JLabel label2 = new JLabel("Your Score: " + account.getTotalScore());
+		
+		int minutes = board.getMinutes();
+		int minsLeft = 29-minutes;
+		int seconds = board.getSeconds();
+		int secsLeft = 60-seconds;
+		
+		int newScore = (minsLeft * 60) + secsLeft + 500;
+		
+		JLabel label2 = new JLabel("Your Score: " + newScore);
 	
 		// Set layout for the panels as FlowLayout.
 		panel1.setLayout(new FlowLayout());
 		panel2.setLayout(new BoxLayout(panel2,BoxLayout.Y_AXIS));
 		panel3.setLayout(new FlowLayout());
+		
+		label1.setAlignmentX(Component.CENTER_ALIGNMENT);
+		label2.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 	    // Add JLabel, JTextFie2d, and JButtons to JPanels.
 	    panel2.add(label1);
@@ -138,7 +146,6 @@ public class PopUpManager {
 	    // Add an action listener to button1.
 	    button1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				accountManager.writeDB(account);
 				frame.dispose();
 			}
 		});
@@ -146,7 +153,6 @@ public class PopUpManager {
 	    // Add an action listener to button2.
 	    button2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				accountManager.writeDB(account);
 				frame.dispose();
 				board.resetGameBoard();
 			}
@@ -168,7 +174,6 @@ public class PopUpManager {
 
 	// This function handles pop-up three. It displays a message if the Sudoku solution is incorrect.
 	private void createPopUpThree(GameAccount account, GameBoard board){
-		
 		// Create JFrame, JPanels, JButtons, JLabels, and JTextField.
 		JFrame frame = new JFrame("Message");
 		JPanel panel1 = new JPanel();
@@ -195,10 +200,9 @@ public class PopUpManager {
 			}
 		});
 	    
-	    // Add an action listener to button2.
+	 // Add an action listener to button2.
 	    button2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				accountManager.writeDB(account);
 				frame.dispose();
 				board.resetGameBoard();
 			}
@@ -218,8 +222,8 @@ public class PopUpManager {
 	    frame.setVisible(true);
 	}
 	
-private void createPopUpFour(String message){
-		
+	// This function handles pop-up four. It displays any message passed to it.
+	private void createPopUpFour(String message){
 		// Create JFrame, JPanels, JButtons, JLabels, and JTextField.
 		JFrame frame = new JFrame("Message");
 		JPanel panel1 = new JPanel();

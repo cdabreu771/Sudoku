@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 import Sudoku.GameAccount;
 
-
+// This class manages the game accounts.
 public class GameAccountManager {
 	
 	private ArrayList<GameAccount> list = new ArrayList<GameAccount>();
@@ -19,13 +19,13 @@ public class GameAccountManager {
 	private Scanner scanner = new Scanner(System.in);
 	private File file;
 	
-	//This function is the constructor for the Bank class. It imports a file, and calls the reader.
+	// This is the constructor for the Bank class. It imports a file, and calls the reader.
 	protected GameAccountManager() {
-		
 		file = new File(location);
 		readDB();
 	}
 	
+	// This function reads in data from the input file and creates game accounts.
 	private void readDB() {
 		try {
 			BufferedReader bufferedReader = new BufferedReader(new FileReader(file)); //Bufferedreader reads one line.
@@ -55,43 +55,38 @@ public class GameAccountManager {
 		}
 	}
 	
+	// This function handles the log-in proponent of the game.
 	protected GameAccount logIn(String userName, char[] password) {
-		
-		
 		GameAccount usersAccount = null;
-		
-		
-		
-			for (int i = 0; i < list.size(); i ++) { // arrayList.size() <-- if array is of objects
-				GameAccount gameAccount = list.get(i);  //<-- arrayList.get(i), array[i]
-				if(gameAccount.getPlayerName().equals(userName)) {
-					usersAccount = gameAccount;
-					break;
-				}
+	
+		for (int i = 0; i < list.size(); i ++) { // arrayList.size() <-- if array is of objects
+			GameAccount gameAccount = list.get(i);  //<-- arrayList.get(i), array[i]
+			if(gameAccount.getPlayerName().equals(userName)) {
+				usersAccount = gameAccount;
+				break;
 			}
-			
-			if(usersAccount == null) {
-				PopUpManager popUp = new PopUpManager("Error: Incorrect Username Entered");
-				return usersAccount;
-			}
-			
-				
-			if (usersAccount.checkPassword(password)) {
-				//gAccount = usersAccount;
-				return usersAccount;
-				
-			}
-			
-			PopUpManager popUp = new PopUpManager("Error: Incorrect Password Entered");
-			usersAccount = null;
+		}
+		
+		if(usersAccount == null) {
+			PopUpManager popUp = new PopUpManager("Error: Incorrect Username Entered");
 			return usersAccount;
+		}
+		
+		if (usersAccount.checkPassword(password)) {
+			//gAccount = usersAccount;
+			return usersAccount;
+			
+		}
+			
+		PopUpManager popUp = new PopUpManager("Error: Incorrect Password Entered");
+		usersAccount = null;
+		return usersAccount;
 	}
-
+	
+	// This function allows for the game account file to be rewritten and updated.
 	protected void writeDB(GameAccount gAccount) {
 		try {
-			FileOutputStream writer = new FileOutputStream(file,false); //false because we do not 
-			//want to append (add duplicates) to the original file
-			
+			FileOutputStream writer = new FileOutputStream(file,false); 
 			
 			for (int i = 0; i < list.size(); i ++) {
 				StringBuilder account = new StringBuilder();

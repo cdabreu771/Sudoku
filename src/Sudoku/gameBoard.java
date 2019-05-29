@@ -1,68 +1,50 @@
 package Sudoku;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.InputMismatchException;
 
 
 // This class creates the UI for the GameBoard
 public class GameBoard {
+	
 	private static final Color WHITE = Color.WHITE;
 	private static final Color GREEN = Color.GREEN;
 	private static final Color ORANGE = Color.ORANGE;
-	GameAccount account = new GameAccount();
-	Timer timer;
-	int mseconds = 0;
-	int seconds = 0;
-	int minutes = 0;
-	int score = 0;
-	String mSecondsString = "00";
-    String secondsString = "00";
-    String minutesString = "00";
-	JLabel label2a = null;
-	JLabel label2b = null;
-	JLabel label3a = null;
-	JLabel label3b = null;
-	JLabel label4a = null;
-	JLabel label4b = null;
-	JLabel label5a = null;
-	JLabel label5b = null;
-	JLabel label6a = null;
-	JLabel label6b = null;
-	JLabel label9 = null;
-	JPanel RPanel = null;
-	SudokuJPanel sudokuPanel = null;
-	SolutionChecker check = null;
-	Thread thread;
+	private GameAccount account = null;
+	private Timer timer;
+	private int mseconds = 0;
+	private int seconds = 0;
+	private int minutes = 0;
+	private int score = 0;
+	private String mSecondsString = "00";
+    private String secondsString = "00";
+    private String minutesString = "00";
+	private JLabel nameLabel = null;
+	private JLabel name = null;
+	private JLabel gamesPlayedLabel = null;
+	private JLabel gamesPlayed = null;
+	private JLabel gamesWonLabel = null;
+	private JLabel gamesWon = null;
+	private JLabel gamesLostLabel = null;
+	private JLabel gamesLost = null;
+	private JLabel scoreLabel = null;
+	private JLabel scoreVal = null;
+	private JLabel timerStr = null;
+	private JPanel RPanel = null;
+	private SudokuJPanel sudokuPanel = null;
+	private GameAccountManager manager = null;
+	private Thread thread;
 	
 	// This is the constructor for the GameBoard. It calls createGameBoard().
-	//protected GameBoard(GameAccount account) {
-	//	this.account = account;
-	//	createGameBoard();
-	//}
-	// This is the constructor for the GameBoard. It calls createGameBoard().
-	protected GameBoard(GameAccount account, boolean status) {
+	protected GameBoard(GameAccountManager accountManager,GameAccount account) {
 		this.account = account;
-		check = new SolutionChecker(account);
-		resetGameBoard();
-}
-	protected GameBoard(GameAccount account) {
-		check = new SolutionChecker(account);
+		manager = accountManager;
 		createGameBoard();
 	}
 	
 	// This function creates the game board.
 	private void createGameBoard() {
-		
 		// Sudoku Game Screen
 		JFrame frame = new JFrame("Sudoku");
 		JPanel LPanel = new JPanel();
@@ -77,62 +59,61 @@ public class GameBoard {
 		LPanelBottom.setBounds(0,500,300,300);
 		sudokuPanel = new SudokuJPanel(account, this);
 		
+		// Layouts
 		frame.setLayout(null);
 		LPanel.setLayout(null);
 		LPanelTop.setLayout(null);
-	
 		LPanelCenter.setLayout(new BoxLayout(LPanelCenter,BoxLayout.Y_AXIS));
 		LPanelBottom.setLayout(new BoxLayout(LPanelBottom,BoxLayout.Y_AXIS));
-		//LPanelBottom.setLayout(null);
 		RPanel.setLayout(null);
 		
 		// Left Top Panel: Scoreboard
 		Font font1 = new Font("Arial", Font.BOLD,26);
-		JLabel label1 = new JLabel("Scoreboard");
-		label1.setBounds(0,0,300,50);
-		label1.setFont(font1);
-		label1.setHorizontalAlignment(JLabel.CENTER);
-	    label1.setVerticalAlignment(JLabel.CENTER);
+		JLabel scoreBoard = new JLabel("Scoreboard");
+		scoreBoard.setBounds(0,0,300,50);
+		scoreBoard.setFont(font1);
+		scoreBoard.setHorizontalAlignment(JLabel.CENTER);
+	    scoreBoard.setVerticalAlignment(JLabel.CENTER);
 
-		label2a = new JLabel("Player Name:");
-		label2a.setBounds(5,50,200,50);
-		label2b = new JLabel(account.getPlayerName());
-		label2b.setBounds(200,50,50,50);
-		label3a = new JLabel("Number of Games Played:");
-		label3a.setBounds(5,100,200,50);
-		label3b = new JLabel(Integer.toString(account.getGamesPlayed()));
-		label3b.setBounds(200,100,50,50);
-		label4a = new JLabel("Number of Games Won:");
-		label4a.setBounds(5,150,200,50);
-		label4b = new JLabel(Integer.toString(account.getGamesWon()));
-		label4b.setBounds(200,150,50,50);
-		label5a = new JLabel("Number of Games Lost:");
-		label5a.setBounds(5,200,200,50);
-		label5b = new JLabel(Integer.toString(account.getGamesLost()));
-		label5b.setBounds(200,200,50,50);
-		label6a = new JLabel("Total Score:");
-		label6a.setBounds(5,250,200,50);
-		label6b = new JLabel(Integer.toString(account.getTotalScore()));
-		label6b.setBounds(200,250,50,50);
+		nameLabel = new JLabel("Player Name:");
+		nameLabel.setBounds(5,50,200,50);
+		name = new JLabel(account.getPlayerName());
+		name.setBounds(200,50,50,50);
+		gamesPlayedLabel = new JLabel("Number of Games Played:");
+		gamesPlayedLabel.setBounds(5,100,200,50);
+		gamesPlayed = new JLabel(Integer.toString(account.getGamesPlayed()));
+		gamesPlayed.setBounds(200,100,50,50);
+		gamesWonLabel = new JLabel("Number of Games Won:");
+		gamesWonLabel.setBounds(5,150,200,50);
+		gamesWon = new JLabel(Integer.toString(account.getGamesWon()));
+		gamesWon.setBounds(200,150,50,50);
+		gamesLostLabel = new JLabel("Number of Games Lost:");
+		gamesLostLabel.setBounds(5,200,200,50);
+		gamesLost = new JLabel(Integer.toString(account.getGamesLost()));
+		gamesLost.setBounds(200,200,50,50);
+		scoreLabel = new JLabel("Total Score:");
+		scoreLabel.setBounds(5,250,200,50);
+		scoreVal = new JLabel(Integer.toString(account.getTotalScore()));
+		scoreVal.setBounds(200,250,50,50);
 		
-		LPanelTop.add(label1);
-		LPanelTop.add(label2a);
-		LPanelTop.add(label2b);
-		LPanelTop.add(label3a);
-		LPanelTop.add(label3b);
-		LPanelTop.add(label4a);
-		LPanelTop.add(label4b);
-		LPanelTop.add(label5a);
-		LPanelTop.add(label5b);
-		LPanelTop.add(label6a);
-		LPanelTop.add(label6b);
+		LPanelTop.add(scoreBoard);
+		LPanelTop.add(nameLabel);
+		LPanelTop.add(name);
+		LPanelTop.add(gamesPlayedLabel);
+		LPanelTop.add(gamesPlayed);
+		LPanelTop.add(gamesWonLabel);
+		LPanelTop.add(gamesWon);
+		LPanelTop.add(gamesLostLabel);
+		LPanelTop.add(gamesLost);
+		LPanelTop.add(scoreLabel);
+		LPanelTop.add(scoreVal);
 		
 		// Left Center Panel: Board Color
-		JLabel label7 = new JLabel("Board Color");
-		label7.setBounds(0,300,300,50);
-		label7.setHorizontalAlignment(JLabel.CENTER);
-	    label7.setVerticalAlignment(JLabel.CENTER);
-		label7.setFont(font1);
+		JLabel boardColor = new JLabel("Board Color");
+		boardColor.setBounds(0,300,300,50);
+		boardColor.setHorizontalAlignment(JLabel.CENTER);
+	    boardColor.setVerticalAlignment(JLabel.CENTER);
+		boardColor.setFont(font1);
 		
 		String[] options = {"White","Green","Orange"};
 		JComboBox<String> colorSelection = new JComboBox<String>(options);
@@ -153,30 +134,30 @@ public class GameBoard {
 			}
 		});
 			
-		LPanelCenter.add(label7);
+		LPanelCenter.add(boardColor);
 		LPanelCenter.add(colorSelection);
 		
 		// Left Panel Bottom: Timer
-		JLabel label8 = new JLabel("Timer");
-		label8.setBounds(0,600,300,50);
-		label8.setHorizontalAlignment(JLabel.CENTER);
-	    label8.setVerticalAlignment(JLabel.CENTER);
-		label8.setFont(font1);
-		label8.setAlignmentX(Component.CENTER_ALIGNMENT);
-		label9 = new JLabel("00:" + "00:" + "00:" + "00");
+		JLabel timerLabel = new JLabel("Timer");
+		timerLabel.setBounds(0,600,300,50);
+		timerLabel.setHorizontalAlignment(JLabel.CENTER);
+	    timerLabel.setVerticalAlignment(JLabel.CENTER);
+		timerLabel.setFont(font1);
+		timerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		timerStr = new JLabel("00:" + "00:" + "00:" + "00");
 		Font font2 = new Font("Arial", Font.PLAIN, 20);
-		label9.setBounds(0,650,300,50);
-		label9.setHorizontalAlignment(JLabel.CENTER);
-	    label9.setVerticalAlignment(JLabel.CENTER);
-	    label9.setFont(font2);
-	    label9.setAlignmentX(Component.CENTER_ALIGNMENT);
+		timerStr.setBounds(0,650,300,50);
+		timerStr.setHorizontalAlignment(JLabel.CENTER);
+	    timerStr.setVerticalAlignment(JLabel.CENTER);
+	    timerStr.setFont(font2);
+	    timerStr.setAlignmentX(Component.CENTER_ALIGNMENT);
 	    
-	    JButton button1 = new JButton("Play Now");
-		button1.setBounds(0,700,300,50);
-		button1.setHorizontalAlignment(JButton.CENTER);
-		button1.setVerticalAlignment(JButton.CENTER);
-		button1.setAlignmentX(Component.CENTER_ALIGNMENT);
-		button1.addActionListener(new ActionListener() {
+	    JButton playButton = new JButton("Play Now");
+		playButton.setBounds(0,700,300,50);
+		playButton.setHorizontalAlignment(JButton.CENTER);
+		playButton.setVerticalAlignment(JButton.CENTER);
+		playButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		playButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                  thread = new Thread() {
                     public void run() {
@@ -185,8 +166,7 @@ public class GameBoard {
                             long startTime = System.currentTimeMillis();
                      
 
-                            while (elapsedTime < 1800001) {
-
+                            while (minutes < 30) {
                                 elapsedTime = System.currentTimeMillis() - startTime;
                                 try {
                                 	sleep(1);
@@ -224,42 +204,43 @@ public class GameBoard {
                                     minutesString = String.valueOf(minutes);
                                 }
 
-                                label9.setText("00:   " + minutesString + "  :   " + secondsString + "  :   " + mSecondsString);
+                                timerStr.setText("00:   " + minutesString + "  :   " + secondsString + "  :   " + mSecondsString);
                             }
 
                         }catch(Exception exception) {
                             exception.printStackTrace();
                         }
+                        	sudokuPanel.setVisible(false);
+                        	PopUpManager popUp = new PopUpManager("Time's up! You lost the game.");
+                        	account.incrementGamesLost();
+                        	account.incrementGamesPlayed();
+                        	manager.writeDB(account);
                     }
                 };
-        
                 thread.start();
                 RPanel.setVisible(true);
 			}
-           // stopTimer(false);
 		});
 		
-		
-		LPanelBottom.add(label8);
-		LPanelBottom.add(label9);
-		LPanelBottom.add(button1);
-		
+		LPanelBottom.add(timerLabel);
+		LPanelBottom.add(timerStr);
+		LPanelBottom.add(playButton);
 		
 		LPanel.add(LPanelTop);
 		LPanel.add(LPanelCenter);
 		LPanel.add(LPanelBottom);
 		
 		// Right Panel: Sudoku Board
-		JLabel label10 = new JLabel("Sudoku");
-		label10.setHorizontalAlignment(JLabel.CENTER);
-		label10.setVerticalAlignment(JLabel.CENTER);
-		label10.setBounds(0,0,680,30);
-		label10.setFont(font1);
+		JLabel sudokuLabel = new JLabel("Sudoku");
+		sudokuLabel.setHorizontalAlignment(JLabel.CENTER);
+		sudokuLabel.setVerticalAlignment(JLabel.CENTER);
+		sudokuLabel.setBounds(0,0,680,30);
+		sudokuLabel.setFont(font1);
 		
 		sudokuPanel.setBounds(20,30,680,680);
 		sudokuPanel.setLayout(new GridLayout(9,9));
 
-		RPanel.add(label10);
+		RPanel.add(sudokuLabel);
 		RPanel.add(sudokuPanel);
 		
 		frame.add(LPanel);
@@ -272,22 +253,44 @@ public class GameBoard {
 	    frame.setLocation(325,600);
 	    frame.setResizable(false);
 	    frame.setVisible(true);
+	    
+	    frame.addWindowListener(new java.awt.event.WindowAdapter() {
+	        @Override
+	        public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+	            manager.writeDB(account);
+	        }
+	    });   
 	}
 	
+	// This function returns the minutes counted by the timer.
+	protected int getMinutes(){
+		return minutes;
+	}
+	
+	// This function returns the seconds counted by the timer.
+	protected int getSeconds(){
+		return seconds;
+	}
+	
+	// This function stops the timer thread.
+	@SuppressWarnings("deprecation")
 	protected void stopTimer(boolean status) {
 		if (status) {
 			thread.stop();
-			check.setScore(minutes,seconds);
 		}
 	}
-	public void resetGameBoard() {
+		
+	// This function resets the game board.	
+	protected void resetGameBoard() {
 		stopTimer(true);
+		
 		RPanel.setVisible(false);
-		label3b.setText(Integer.toString(account.getGamesPlayed()));
-		label4b.setText(Integer.toString(account.getGamesWon()));
-		label5b.setText(Integer.toString(account.getGamesLost()));
-		label6b.setText(Integer.toString(account.getTotalScore()));
-		label9.setText("00:" + "00:" + "00:" + "00");
+		
+		gamesPlayed.setText(Integer.toString(account.getGamesPlayed()));
+		gamesWon.setText(Integer.toString(account.getGamesWon()));
+		gamesLost.setText(Integer.toString(account.getGamesLost()));
+		scoreVal.setText(Integer.toString(account.getTotalScore()));
+		timerStr.setText("00:" + "00:" + "00:" + "00");
 		mSecondsString = "00";
         secondsString = "00";
         minutesString = "00";
@@ -298,10 +301,6 @@ public class GameBoard {
 		long elapsedTime = 0;
         long startTime = System.currentTimeMillis();
         
-        sudokuPanel.resetOriginalContents();
-       
-		
+        sudokuPanel.resetContents();
 	}
 }
-
-		

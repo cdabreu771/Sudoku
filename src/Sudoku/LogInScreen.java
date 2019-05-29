@@ -11,10 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -23,23 +20,25 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+// This class handles the log-in proponent.
 public class LogInScreen {
-	private GameAccount gAccount = new GameAccount();
 	
-	public LogInScreen() {
+	private GameAccount gAccount = null;
+	private GameAccountManager account = new GameAccountManager();
+	
+	// This is the constructor for the LogInScreen class.
+	protected LogInScreen() {
 		buildScreen();
 	}
-
-	public void buildScreen() {
-		
+	
+	// This function builds the log in screen.
+	private void buildScreen() {
 		BufferedImage image = null;
 		try {
 			image = ImageIO.read(new File("//Users//Camille//Documents//COEN275//Assignment1//src//Sudoku//sudoku.png"));
 		} catch (IOException ex) { System.out.print("IOException Occurred");
 			ex.printStackTrace();
 		}
-		
-		GameAccountManager account = new GameAccountManager();
 		
 		// Start Game Screen
 		JFrame startFrame = new JFrame();
@@ -49,7 +48,6 @@ public class LogInScreen {
 		JPanel startPanel2 = new JPanel();
 		JPanel startPanel3 = new JPanel();
 		JPanel startPanel4 =new JPanel();
-		//JLabel test = new JLabel("test");
 		JLabel imageLabel = new JLabel();
 		imageLabel.setSize(300,300);
 		
@@ -80,9 +78,6 @@ public class LogInScreen {
 		JTextField text1 = new JTextField(FINAL_WIDTH);
 		text1.setText("");
 		JPasswordField text2 = new JPasswordField(FINAL_WIDTH);
-		//text2.setEchoChar('*');
-		//text2.addActionListener(null);
-		
 		
 		JButton button1 = new JButton("Login");
 		
@@ -97,7 +92,6 @@ public class LogInScreen {
 		startPanelR.setSize(340,660);
 		startPanelL.setSize(340,660);
 		
-		// Set size and layout for SudokuPanel.
 		startPanel1.setSize(85, 100);
 		startPanel2.setSize(85, 100);
 		startPanel3.setSize(85, 100);
@@ -138,23 +132,18 @@ public class LogInScreen {
 	    startFrame.setLocation(325,600);
 	    startFrame.setResizable(false);
 	    startFrame.setVisible(true);
-		
-	    //final boolean flag = false;
 	    
 		button1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 			    char[] password = text2.getText().toCharArray();
 				String userName = text1.getText();
-				//String password = text2.getText();
 				gAccount = account.logIn(userName,password);
 				
 				if(gAccount != null){
 					startFrame.dispose();
-					GameBoard game = new GameBoard(gAccount);
+					GameBoard game = new GameBoard(account,gAccount);
 				}
 			}
 		});
 	}
 }
-
-
