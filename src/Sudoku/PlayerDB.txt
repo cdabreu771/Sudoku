@@ -1,2 +1,2 @@
-Camille, password, 1, 0, 1, 0
+Camille, password, 0, 0, 0, 0
 Bob, bob123, 1, 1, 0, 9

@@ -215,6 +215,7 @@ public class GameBoard {
                         	account.incrementGamesLost();
                         	account.incrementGamesPlayed();
                         	manager.writeDB(account);
+                        	
                     }
                 };
                 thread.start();
@@ -279,7 +280,7 @@ public class GameBoard {
 			thread.stop();
 		}
 	}
-		
+	
 	// This function resets the game board.	
 	protected void resetGameBoard() {
 		stopTimer(true);

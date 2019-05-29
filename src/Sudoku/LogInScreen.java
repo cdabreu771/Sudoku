@@ -35,7 +35,7 @@ public class LogInScreen {
 	private void buildScreen() {
 		BufferedImage image = null;
 		try {
-			image = ImageIO.read(new File("//Users//Camille//Documents//COEN275//Assignment1//src//Sudoku//sudoku.png"));
+			image = ImageIO.read(new File("//Users//Camille//Documents//COEN275//Assignment1//src//Sudoku/sudoku.png"));
 		} catch (IOException ex) { System.out.print("IOException Occurred");
 			ex.printStackTrace();
 		}
